@@ -1,5 +1,6 @@
 from __future__ import print_function
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import time
 import datetime
 from datetime import datetime, date, timedelta
@@ -63,20 +64,20 @@ class Shift:
 chromeDriver = 'chromedriver.exe'
 browser = webdriver.Chrome(chromeDriver)
 browser.get('https://logonservices.iam.target.com/v1/login/#!')
-username = browser.find_element_by_id("loginID")
-password = browser.find_element_by_id("pass")
+username = browser.find_element(By.NAME, "loginID")
+password = browser.find_element(By.NAME, "pass")
 username.send_keys("0000000000")  # your username in the quotes
 password.send_keys("hunter2")  # your password in the quotes
-login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
+login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
 time.sleep(7)  # the sleep dictates how many seconds to wait before trying to proceed
 # if your computer, connection, or kronos sucks, probably up it a bit
-qna = browser.find_element_by_id('sec_qna')
+qna = browser.find_element(By.ID, 'sec_qna')
 qna.click()  # this has to be a click to trick it into logging in if you're curious
-login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
+login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
 time.sleep(6)  # same as before, up this number if the program keeps bugging out
-answer = browser.find_element_by_id("answer0")
+answer = browser.find_element(By.ID, "answer0")
 # this next chunk looks for the keyword in your security questions
 # there are 3 security questions but you only need to specify 2 for it to get them all
 # using the first one as an example, if it sees "person" it knows the question is 'who if your favorite person'
@@ -91,11 +92,11 @@ elif "car" in browser.page_source:
 else:
     answer.send_keys("max")  # the else is the last question and doesn't even check for the question, just send the last
     # answer
-submit = browser.find_element_by_id("submit-button")
+submit = browser.find_element(By.ID, "submit-button")
 submit.click()
 time.sleep(5)
 # again you might need to change the sleep number here depending on your circumstances
-table = browser.find_element_by_class_name("request_table_bordered")
+table = browser.find_element(By.CLASS_NAME, "request_table_bordered")
 store = file.Storage('token.json')
 creds = store.get()
 if not creds or creds.invalid:
@@ -105,9 +106,9 @@ service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 for x in range(2, 9):
     # this loop cycles through the week and assembles your shift information and creates the event
-    days = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
+    days = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
                                          + str(x) + "]")
-    shift = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
+    shift = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
                                           + str(x) + "]")
     if not shift.text.strip():
         continue
@@ -120,14 +121,14 @@ for x in range(2, 9):
                     shift_info.splitlines()[3].split('-')[1].strip())
     workday.make_event()
 
-next = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[2]/tbody/tr[1]/td/div/a[2]")
+next = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[2]/tbody/tr[1]/td/div/a[2]")
 next.click()
 
 for x in range(2, 9):
     # this loop cycles through the week and assembles your shift information and creates the event
-    days = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
+    days = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
                                          + str(x) + "]")
-    shift = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
+    shift = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
                                           + str(x) + "]")
     if not shift.text.strip():
         continue
