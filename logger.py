@@ -62,7 +62,7 @@ class Shift:
 
 chromeDriver = 'chromedriver.exe'
 browser = webdriver.Chrome(chromeDriver)
-browser.get('http://wss.target.com/selfservice')
+browser.get('https://logonservices.iam.target.com/v1/login/#!')
 username = browser.find_element_by_id("loginID")
 password = browser.find_element_by_id("pass")
 username.send_keys("0000000000")  # your username in the quotes
