@@ -21,15 +21,19 @@ class Shift:
         self.day = day
         self.date = date
         self.position = position
-        self.startTime = datetime.strptime(start_time, "%I:%M%p").strftime("%H:%M:%S")
-        self.endTime = datetime.strptime(end_time, "%I:%M%p").strftime("%H:%M:%S")
+        self.startTime = datetime.strptime(
+            start_time, "%I:%M%p").strftime("%H:%M:%S")
+        self.endTime = datetime.strptime(
+            end_time, "%I:%M%p").strftime("%H:%M:%S")
 
     def make_event(self):
         working = False
         now = self.date + 'T' + self.startTime + '-08:00'
-        now_iso = (datetime.strptime(now, "%Y-%m-%dT%H:%M:%S-08:00").isoformat() + 'Z')
+        now_iso = (datetime.strptime(
+            now, "%Y-%m-%dT%H:%M:%S-08:00").isoformat() + 'Z')
         # print(now_iso)
-        tomorrow_iso = ((datetime.strptime(now, "%Y-%m-%dT%H:%M:%S-08:00") + timedelta(days=1)).isoformat() + 'Z')
+        tomorrow_iso = ((datetime.strptime(
+            now, "%Y-%m-%dT%H:%M:%S-08:00") + timedelta(days=1)).isoformat() + 'Z')
         # print(tomorrow_iso)
         events_result = service.events().list(calendarId='primary', timeMin=now_iso, timeMax=tomorrow_iso,
                                               singleEvents=True, orderBy='startTime').execute()
@@ -70,13 +74,14 @@ username.send_keys("0000000000")  # your username in the quotes
 password.send_keys("hunter2")  # your password in the quotes
 login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
-time.sleep(7)  # the sleep dictates how many seconds to wait before trying to proceed
+# the sleep dictates how many seconds to wait before trying to proceed
+time.sleep(7)
 # if your computer, connection, or kronos sucks, probably up it a bit
 qna = browser.find_element(By.ID, 'submit-button')
 qna.click()  # this has to be a click to trick it into logging in if you're curious
 login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
-time.sleep(6)  # same as before, up this number if the program keeps bugging out 
+time.sleep(6)  # same as before, up this number if the program keeps bugging out
 
 # WARNING: Everything after this is not necessary anymore
 answer = browser.find_element(By.ID, "answer0")
@@ -92,7 +97,8 @@ if "person" in browser.page_source:
 elif "car" in browser.page_source:
     answer.send_keys("tesla")
 else:
-    answer.send_keys("max")  # the else is the last question and doesn't even check for the question, just send the last
+    # the else is the last question and doesn't even check for the question, just send the last
+    answer.send_keys("max")
     # answer
 submit = browser.find_element(By.ID, "submit-button")
 submit.click()
@@ -109,35 +115,38 @@ service = build('calendar', 'v3', http=creds.authorize(Http()))
 for x in range(2, 9):
     # this loop cycles through the week and assembles your shift information and creates the event
     days = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
-                                         + str(x) + "]")
+                                + str(x) + "]")
     shift = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
-                                          + str(x) + "]")
+                                 + str(x) + "]")
     if not shift.text.strip():
         continue
     shift_info = (days.text + '\n' + shift.text)
 
     workday = Shift(shift_info.splitlines()[0],
-                    datetime.strptime(shift_info.splitlines()[1], "%m/%d/%y").strftime("%Y-%m-%d"),
+                    datetime.strptime(shift_info.splitlines()[
+                                      1], "%m/%d/%y").strftime("%Y-%m-%d"),
                     shift_info.splitlines()[2],
                     shift_info.splitlines()[3].split('-')[0].strip(),
                     shift_info.splitlines()[3].split('-')[1].strip())
     workday.make_event()
 
-next = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[2]/tbody/tr[1]/td/div/a[2]")
+next = browser.find_element(
+    By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[2]/tbody/tr[1]/td/div/a[2]")
 next.click()
 
 for x in range(2, 9):
     # this loop cycles through the week and assembles your shift information and creates the event
     days = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
-                                         + str(x) + "]")
+                                + str(x) + "]")
     shift = browser.find_element(By.XPATH, "//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
-                                          + str(x) + "]")
+                                 + str(x) + "]")
     if not shift.text.strip():
         continue
     shift_info = (days.text + '\n' + shift.text)
 
     workday = Shift(shift_info.splitlines()[0],
-                    datetime.strptime(shift_info.splitlines()[1], "%m/%d/%y").strftime("%Y-%m-%d"),
+                    datetime.strptime(shift_info.splitlines()[
+                                      1], "%m/%d/%y").strftime("%Y-%m-%d"),
                     shift_info.splitlines()[2],
                     shift_info.splitlines()[3].split('-')[0].strip(),
                     shift_info.splitlines()[3].split('-')[1].strip())
