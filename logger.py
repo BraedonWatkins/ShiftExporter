@@ -64,15 +64,15 @@ class Shift:
 chromeDriver = 'chromedriver.exe'
 browser = webdriver.Chrome(chromeDriver)
 browser.get('https://logonservices.iam.target.com/v1/login/#!')
-username = browser.find_element(By.NAME, "loginID")
-password = browser.find_element(By.NAME, "pass")
+username = browser.find_element(By.ID, "loginID")
+password = browser.find_element(By.ID, "password")
 username.send_keys("0000000000")  # your username in the quotes
 password.send_keys("hunter2")  # your password in the quotes
 login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
 time.sleep(7)  # the sleep dictates how many seconds to wait before trying to proceed
 # if your computer, connection, or kronos sucks, probably up it a bit
-qna = browser.find_element(By.ID, 'sec_qna')
+qna = browser.find_element(By.ID, 'submit-button')
 qna.click()  # this has to be a click to trick it into logging in if you're curious
 login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
