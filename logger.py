@@ -76,7 +76,9 @@ qna = browser.find_element(By.ID, 'submit-button')
 qna.click()  # this has to be a click to trick it into logging in if you're curious
 login_attempt = browser.find_element(By.XPATH, "//*[@type='submit']")
 login_attempt.submit()
-time.sleep(6)  # same as before, up this number if the program keeps bugging out
+time.sleep(6)  # same as before, up this number if the program keeps bugging out 
+
+# WARNING: Everything after this is not necessary anymore
 answer = browser.find_element(By.ID, "answer0")
 # this next chunk looks for the keyword in your security questions
 # there are 3 security questions but you only need to specify 2 for it to get them all
